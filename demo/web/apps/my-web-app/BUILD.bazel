@@ -1,0 +1,32 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+package(default_visibility = ["//visibility:public"])
+
+npm_link_all_packages(name = "node_modules")
+
+ts_project(
+    name = "my-web-app_ts",
+    srcs = glob(
+        ["**/*.ts"],
+    ),
+    declaration = True,
+    source_map = True,
+    tsconfig = "//demo/web/apps:tsconfig",
+    deps = [
+        "//:node_modules/@demo/my-lib-a",
+        "//:node_modules/@demo/my-lib-b",
+        "//:node_modules/@types/node",
+        "//:node_modules/tslib",
+    ],
+)
+
+js_binary(
+    name = "my-web-app",
+    data = [
+        ":my-web-app_ts",
+        "//:node_modules",
+    ],
+    entry_point = ":src/app.js",
+)

@@ -1,0 +1,30 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_js//npm:defs.bzl", "npm_package")
+
+ts_project(
+    name = "my-lib-b_ts",
+    srcs = ["my-lib-b.ts"],
+    declaration = True,
+    source_map = True,
+    tsconfig = "//demo/web/libraries:tsconfig",
+    deps = [
+        "//:node_modules/@demo/my-lib-a",
+        "//:node_modules/@types/express",
+        "//:node_modules/@types/node",
+        "//:node_modules/express",
+        "//:node_modules/tslib",
+    ],
+)
+
+npm_package(
+    name = "my-lib-b",
+    srcs = [
+        "package.json",
+        ":my-lib-b_ts",
+    ],
+    data = [
+        "//:node_modules/@demo/my-lib-a",
+    ],
+    include_runfiles = False,
+    visibility = ["//visibility:public"],
+)
