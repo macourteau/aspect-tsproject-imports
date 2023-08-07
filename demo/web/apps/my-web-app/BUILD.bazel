@@ -26,7 +26,6 @@ js_binary(
     name = "my-web-app",
     data = [
         ":my-web-app_ts",
-        "//:node_modules",
     ],
     entry_point = ":src/app.js",
 )
